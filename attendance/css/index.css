@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: white;
+    color: aliceblue;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.main{
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    background-color: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    height: 500px;
+}
+.logo{
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+.card{
+    width: 60%;
+    padding: 40px;
+    background-color: white;
+    height: fit-content;
+}
+.card h2{
+    color: rgb(0, 98, 255);
+}
+form-group{
+    margin-bottom: 18px;
+}
+.input{
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+}
+input:focus{
+    outline: none;
+    border-color: rgb(0, 98, 255);
+}
+.btn-primary{
+    background: #1e3a8a;
+    background-color: #1e3a8a;
+    color: white;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 8px;
+    border-color: white;
+    font-size: 22px;
+    transition: 0.3s ease;
+    margin-top: 12px;
+    box-shadow: none;
+
+}
+.btn-register{
+    background: white;
+    color: #1e3a8a;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    border-color:white ;
+    border-radius: 8px;
+    font-size: 22px;
+    transition: 0.3s ease;
+    margin-top: 12px;
+    outline: none;
+    border: 0px;
+}
+.btn-forgot{
+    background: white;
+    color: #dc3545;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    border-color:white ;
+    border-radius: 8px;
+    font-size: 22px;
+    transition: 0.3s ease;
+    margin-top: 12px;
+    box-shadow: none;
+    border: 0px;
+}
+.btn-confirm{
+    background: white;
+    color: #28a745;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    border-color:white ;
+    border-radius: 8px;
+    font-size: 22px;
+    transition: 0.3s ease;
+    margin-top: 12px;
+    box-shadow: none;
+    border: 0px;
+}
+label{
+    font-size: 18px;
+    color: #333;
+    font-size: medium;
+    display: block;
+}
