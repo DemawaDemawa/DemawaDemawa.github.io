@@ -1,3 +1,25 @@
+function showLoading() {
+  const loading = document.getElementById('loading');
+  if (loading) loading.style.display = 'block';
+}
+
+function hideLoading() {
+  const loading = document.getElementById('loading');
+  if (loading) loading.style.display = 'none';
+}
+
+let chartsLoaded = 0;
+const chartsRequired = 4;
+
+function checkAllChartsLoaded() {
+  chartsLoaded++;
+  if (chartsLoaded === chartsRequired) {
+    hideLoading();
+  }
+}
+
+showLoading();
+
 let totalAdmins = 0
 let totalStudents = 0
 
@@ -12,6 +34,7 @@ firebase.database().ref('userDetails').once("value", function(snapshot){
             totalStudents++
         }
     });
+    checkAllChartsLoaded();
     drawbargraph()
 })
 
@@ -52,6 +75,7 @@ firebase.database().ref('courses').once("value", function(snapshot){
     });
     //show data
     mycourseschart()
+    checkAllChartsLoaded()
 })
 
 function mycourseschart(){
@@ -101,6 +125,7 @@ firebase.database().ref('userDetails').once("value", function(snapshot){
     });
     //show data
     mylecturerchart()
+    checkAllChartsLoaded()
 })
 
 function mylecturerchart(){
@@ -147,6 +172,7 @@ firebase.database().ref('userDetails').once("value", function(snapshot){
     });
     //show data
     mystudentschart()
+    checkAllChartsLoaded()
 })
 
 function mystudentschart(){

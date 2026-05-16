@@ -7,7 +7,7 @@ btnaddstudent.addEventListener('click', () =>{
 
 
   if(txtfname == "" || txtemail == ""){
-  	alert("Name and email be filled")
+  	Swal.fire('Error', 'Name and email must be filled', 'error')
   }else{
   	
   		let emailid = txtemail.replace(/\./g, "_dot_").replace(/@/g, "_at_")
@@ -19,20 +19,38 @@ btnaddstudent.addEventListener('click', () =>{
         let createdby = user.email
   		firebase.auth().createUserWithEmailAndPassword(txtemail,autopassword)
   		.then((userCredential) =>{
-  			firebase.database().ref('userDetails/' + emailid).set({
-  				FirstName:txtfname,
-  				LastName:txtlname,
-  				Email: txtemail,
-  				Status: status,
-  				CreatedBy: createdby,
-  				Role: role,
-  				CreatedOn: timenow
-  			})
-  			alert("New student added password is 12345678 and username is email ")
+			return firebase.database().ref('userDetails/' + emailid).set({
+				FirstName:txtfname,
+				LastName:txtlname,
+				Email: txtemail,
+				Status: status,
+				CreatedBy: createdby,
+				Role: role,
+				CreatedOn: timenow
+			})
+		})
+		.then(() => {
+			const adminEmail = sessionStorage.getItem('adminEmail') || localStorage.getItem('adminEmail')
+			const adminPassword = sessionStorage.getItem('adminPassword') || localStorage.getItem('adminPassword')
+			if (adminEmail && adminPassword) {
+				return firebase.auth().signInWithEmailAndPassword(adminEmail, adminPassword)
+			}
+			return firebase.auth().signOut()
+		})
+		.then(() => {
+			const adminEmail = sessionStorage.getItem('adminEmail')
+			if (adminEmail) {
+				Swal.fire('Success', 'New student added. Password is 12345678 and username is the email.', 'success')
+			} else {
+				Swal.fire('Warning', 'New student added. Please log in again as admin to continue.', 'warning')
+			}
+			document.getElementById('txtfname').value = ''
+			document.getElementById('txtlname').value = ''
+			document.getElementById('txtemail').value = ''
   		})
   		.catch((error) => {
   			console.log(error)
-  			alert(error.message)
+  			Swal.fire('Error', error.message, 'error')
   		})
   	
   }
@@ -77,10 +95,10 @@ function suspendstudent(studentid){
         Status:"inactive"
     })
     .then(() =>{
-        alert("Student suspended")
+        Swal.fire('Success', 'Student suspended', 'success')
     })
-    .then((error) =>{
-        alert("Error while suspending")
+    .catch((error) =>{
+        Swal.fire('Error', 'Error while suspending', 'error')
     })
 
 }
@@ -128,10 +146,10 @@ function activatestudent(studentid){
         Status:"active"
     })
     .then(() =>{
-        alert("Student activated")
+        Swal.fire('Success', 'Student activated', 'success')
     })
-    .then((error) =>{
-        alert("Error while activating")
+    .catch((error) =>{
+        Swal.fire('Error', 'Error while activating', 'error')
     })
 
 }

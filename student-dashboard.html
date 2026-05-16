@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Student Dashboard</title>
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
@@ -22,66 +22,43 @@
 <header class="header">
   <button class="menu-toggle">☰</button>
   <nav class="nav">
-    <a href="#">Dashboard</a>
-    <a href="courses.html">Courses</a>
-    <a href="students.html">Students</a>
-    <a href="admins.html">Admins</a>
-    <a href="lecturers.html">Lecturers</a>
-    <a href="gps.html">GPS</a>
-    <a href="reports.html">Reports</a>
+    <a href="student-dashboard.html">Dashboard</a>
+    <a href="#">My Profile</a>
+    <a href="#">My Courses</a>
     <a href="javascript:void(0)" onclick="logout()">Logout</a>
   </nav>
 </header>
 
-<!-- MAIN -->
 <main class="container">
-
- <!-- Cards -->
-<div class="cards-grid">
-
-  <div class="card">
-    <h3>Total Users</h3>
-
-    <p class="stat-number" id="lbtoTotalStudents">
-      <span class="loader"></span>
-    </p>
+  <div class="cards-grid">
+    <div class="card">
+      <h3>Welcome Student</h3>
+      <p id="lbStudentName" class="stat-number"></p>
+    </div>
+    <div class="card">
+      <h3>Total Courses</h3>
+      <p id="lbStudentCourses" class="stat-number"><span class="loader"></span></p>
+    </div>
+    <div class="card">
+      <h3>Account Status</h3>
+      <p id="lbStudentStatus" class="stat-number"><span class="loader"></span></p>
+    </div>
+    <div class="card">
+      <h3>Active Students</h3>
+      <p id="lbStudentActive" class="stat-number"><span class="loader"></span></p>
+    </div>
   </div>
-
-  <div class="card">
-    <h3>Courses</h3>
-    <p class="stat-number" id="lbtoTotalCourses">
-      <span class="loader"></span>
-    </p>
-  </div>
-
-  <div class="card">
-    <h3>Lecturers</h3>
-    <p class="stat-number" id="lbtoTotalLecturers">
-      <span class="loader"></span>
-    </p>
-  </div>
-
-  <div class="card">
-    <h3>Pending Approvals</h3>
-    <p class="stat-number" id="lbtoTotalApprovals">
-      <span class="loader"></span>
-    </p>
-  </div>
-
-</div>
 </main>
 
-<!-- FOOTER -->
 <footer class="footer">
-  <p>© 2026 DEMAWA Admin Panel</p>
+  <p>© 2026 DEMAWA Student Portal</p>
 </footer>
 <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-auth.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/config.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/student-dashboard.js"></script>
 <script>
   const menuToggle = document.querySelector('.menu-toggle');
   const nav = document.querySelector('.nav');
@@ -89,16 +66,6 @@
     nav.classList.toggle('active');
     menuToggle.textContent = nav.classList.contains('active') ? "✖" : "☰";
   });
-
-let lbusername = document.getElementById('lbusername')
-auth.onAuthStateChanged( function (user) {
-  if (user) {
-    lbusername.innerHTML= user.email
-  }else{
-    window.location.href ="index.html"
-  }
-})
 </script>
-
 </body>
 </html>

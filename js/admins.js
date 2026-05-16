@@ -8,12 +8,12 @@ btnaddadmin.addEventListener('click', () => {
 
 
 if (txtfname === '' || txtemail === '') {
-    alert('First name and email must be filled')
+    Swal.fire('Error', 'First name and email must be filled', 'error')
     return
   }
 
   if (!validateEmail(txtemail)) {
-    alert('Please enter a valid email address')
+    Swal.fire('Error', 'Please enter a valid email address', 'error')
     return
   }
 
@@ -28,6 +28,10 @@ if (txtfname === '' || txtemail === '') {
   let user = firebase.auth().currentUser
   let createdby = user ? user.email : ''
 
+  const adminEmail = sessionStorage.getItem('adminEmail')
+  const adminPassword = sessionStorage.getItem('adminPassword')
+  const shouldRestoreAdmin = adminEmail && adminPassword
+
   firebase.auth().createUserWithEmailAndPassword(txtemail, autopassword)
     .then(() => {
       return firebase.database().ref('userDetails/' + emailid).set({
@@ -41,7 +45,17 @@ if (txtfname === '' || txtemail === '') {
       })
     })
     .then(() => {
-      alert('New admin added. Password is 12345678 and username is the email.')
+      if (shouldRestoreAdmin) {
+        return firebase.auth().signInWithEmailAndPassword(adminEmail, adminPassword)
+      }
+      return firebase.auth().signOut()
+    })
+    .then(() => {
+      if (shouldRestoreAdmin) {
+        Swal.fire('Success', 'New admin added. Password is 12345678 and username is the email.', 'success')
+      } else {
+        Swal.fire('Warning', 'New admin added. Please log in again as admin to continue.', 'warning')
+      }
       document.getElementById('txtfname').value = ''
       document.getElementById('txtlname').value = ''
       document.getElementById('txtemail').value = ''
@@ -49,7 +63,7 @@ if (txtfname === '' || txtemail === '') {
     })
     .catch((error) => {
       console.error(error)
-      alert(error.message)
+      Swal.fire('Error', error.message, 'error')
     })
     .finally(() => {
       btnaddadmin.disabled = false
@@ -100,11 +114,11 @@ function suspendadmin(adminid){
         Status:"inactive"
     })
     .then(() =>{
-        alert("Admin suspended")
+        Swal.fire('Success', 'Admin suspended', 'success')
     })
     .catch((error) =>{
         console.error(error)
-        alert("Error while suspending")
+        Swal.fire('Error', 'Error while suspending', 'error')
     })
 
 }
@@ -149,14 +163,14 @@ function activateadmin(adminid){
     let confirmSuspend = confirm("Are you sure you want to activate this admin ?")
     if(!confirmSuspend) return;
     firebase.database().ref("userDetails/" + adminid).update({
-        Status:"active"
+        Status:"active",
     })
     .then(() =>{
-        alert("Admin activated")
+        Swal.fire('Success', 'Admin activated', 'success')
     })
     .catch((error) =>{
         console.error(error)
-        alert("Error while activating")
+        Swal.fire('Error', 'Error while activating', 'error')
     })
 
 }
@@ -168,7 +182,9 @@ firebase.database().ref('userDetails').once("value", function(snapshot){
     let total = 0
 
     snapshot.forEach(function(childSnapshot){
+        if(childSnapshot.val().Status == "active" && childSnapshot.val().Role == "admin"){
         total += 1
+        }
     });
 
     // Replaces spinner with actual number

@@ -4,7 +4,7 @@ btnlogin.addEventListener("click", () =>{
 	let txtpass = document.getElementById('txtpass').value
 	btnlogin.innerHTML = "Please wait ..."
 	if (txtusername == "" || txtpass == ""){
-		alert("Please fill all details.")
+		Swal.fire('Error', 'Please fill all details.', 'error')
 	}else{
 		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 		.then(() =>{
@@ -16,27 +16,45 @@ btnlogin.addEventListener("click", () =>{
 		})
 		.then((snapshot) =>{
 			const userDetails = snapshot.val()
-			const role = userDetails.Role
-			const status = userDetails.Status
-			if (status == "active"){
-				if(role == "Admin"){
-					// admin
-				window.location.href = "dashboard.html"
-				}else if(role == "Student"){
-					// studnet
-				alert("Student logged in ")
+			if (!userDetails) {
+				Swal.fire('Error', 'User details not found', 'error')
+				btnlogin.innerHTML = "Log in"
+				return
+			}
+			const role = (userDetails.Role || '').toString().trim().toLowerCase()
+			const status = (userDetails.Status || '').toString().trim().toLowerCase()
+			if (status === "active"){
+				if(role === "admin"){
+					sessionStorage.setItem('adminEmail', txtusername)
+					sessionStorage.setItem('adminPassword', txtpass)
+					localStorage.setItem('adminEmail', txtusername)
+					localStorage.setItem('adminPassword', txtpass)
+					btnlogin.innerHTML = "Log in"
+					window.location.href = "dashboard.html"
 				}else{
-					// active users with no roles
-				alert("No role added connnect with admin")
+					sessionStorage.removeItem('adminEmail')
+					sessionStorage.removeItem('adminPassword')
+					localStorage.removeItem('adminEmail')
+					localStorage.removeItem('adminPassword')
+					if(role === "student"){
+						btnlogin.innerHTML = "Log in"
+						window.location.href = "student-dashboard.html"
+					}else if(role === "lecturer"){
+						btnlogin.innerHTML = "Log in"
+						window.location.href = "lecturer-dashboard.html"
+					}else{
+						Swal.fire('Warning', 'No role added. Connect with admin', 'warning')
+						btnlogin.innerHTML = "Log in"
+					}
 				}
 
 			}else{
-				// inactive account
-				alert("account bloked connnect with admin")
+				Swal.fire('Error', 'Account blocked. Connect with admin', 'error')
+				btnlogin.innerHTML = "Log in"
 			}
 		})
 		.catch((error) =>{
-			alert("Wrong Password")
+			Swal.fire('Error', 'Wrong Password', 'error')
 			//console.log(error)
 			btnlogin.innerHTML = "Log in"
 		})
