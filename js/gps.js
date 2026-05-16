@@ -17,22 +17,22 @@ let btnAdd = document.getElementById("btnaddcourse");
 
     // validation
     if (venueName == "") {
-      alert("Enter venue name");
+      Swal.fire('Error', 'Enter venue name', 'error');
       return;
     }
     // check if venue code is empty the return code stops here
     if (venueCode == "") {
-      alert("Enter venue code");
+      Swal.fire('Error', 'Enter venue code', 'error');
       return;
     }
     // check if longitude is empty the return code stops here
     if (longitude == "") {
-      alert("Enter longitude");
+      Swal.fire('Error', 'Enter longitude', 'error');
       return;
     }
     // check if latitude is empty the return code stops here
     if (latitude == "") {
-      alert("Enter latitude");
+      Swal.fire('Error', 'Enter latitude', 'error');
       return;
     }
 
@@ -48,7 +48,7 @@ let btnAdd = document.getElementById("btnaddcourse");
     })
 
     .then(() => {
-      alert("GPS added successfully");
+      Swal.fire('Success', 'GPS added successfully', 'success');
 
       // clear inputs
       document.getElementById("txtvenuename").value = "";
@@ -61,7 +61,7 @@ let btnAdd = document.getElementById("btnaddcourse");
     })
 
     .catch((error) => {
-      alert(error.message);
+      Swal.fire('Error', error.message, 'error');
     });
   });
 
@@ -160,10 +160,27 @@ loaddataInactive();
       Status: "inactive"
     })
     .then(() => {
-      alert("GPS Venue closed successfully");
+      Swal.fire('Success', 'GPS Venue closed successfully', 'success');
     })
     .catch((error) => {
-      alert(error.message);
+      Swal.fire('Error', error.message, 'error');
+    });
+
+  }
+  function openVenue(venueCode) {
+
+    let confirmOpen = confirm("Are you sure you want to open this GPS venue?");
+
+    if (!confirmOpen) return;
+
+    firebase.database().ref("GpsVenus/" + venueCode).update({
+      Status: "active"
+    })
+    .then(() => {
+      Swal.fire('Success', 'GPS Venue opened successfully', 'success');
+    })
+    .catch((error) => {
+      Swal.fire('Error', error.message, 'error');
     });
 
   }
@@ -205,11 +222,12 @@ firebase.database().ref('GpsVenus').once("value", function(snapshot){
     let total = 0
     snapshot.forEach(function(childSnapshot){
         let data = childSnapshot.val()
-        total+=1
+        if(data.Status == "active"){
+            total++
+        }
     });
    lbtoTotalActiveGPS.innerHTML = total 
 })
-
 //counter for total courses
 let lbtoTotalPastGPS = document.getElementById('lbtoTotalPastGPS')
 

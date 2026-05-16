@@ -8,13 +8,13 @@ btncreate.addEventListener('click', () =>{
  let txtconpass = document.getElementById("txtconpass").value
 
   if(txtfname == "" || txtemail == "" || txtpass == ""){
-  	alert("Name and email be filled")
+  	Swal.fire('Error', 'Name and email must be filled', 'error')
   }else{
   	if (txtconpass == txtpass) {
   		let emailid = txtemail.replace(/\./g, "_dot_").replace(/@/g, "_at_")
   		let status = "inactive"
   		let timenow = Date.now(); 
-  		let role = "Admin"
+  		let role = "admin"
   		firebase.auth().createUserWithEmailAndPassword(txtemail,txtpass)
   		.then((userCredential) =>{
   			firebase.database().ref('userDetails/' + emailid).set({
@@ -26,14 +26,14 @@ btncreate.addEventListener('click', () =>{
   				Role: role,
   				CreatedOn: timenow
   			})
-  			alert("Account Created ")
+				Swal.fire('Success', 'Account Created Successfully', 'success')
   		})
   		.catch((error) => {
   			console.log(error)
-  			alert(error.message)
+  			Swal.fire('Error', error.message, 'error')
   		})
   	}else{
-  		alert("Password do  not match")
+  		Swal.fire('Error', 'Passwords do not match', 'error')
   	}
   }
 

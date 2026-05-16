@@ -46,22 +46,22 @@ btnbtnaddcourse.addEventListener("click", function() {
 
     // validation
     if (txtcoursename == "") {
-      alert("Enter course name");
+      Swal.fire('Error', 'Enter course name', 'error');
       return;
     }
     // check if course code is empty the return code stops here
     if (txtcoursecode == "") {
-      alert("Enter course code");
+      Swal.fire('Error', 'Enter course code', 'error');
       return;
     }
     // check if lecturer is empty the return code stops here
     if (lecturerselect == "") {
-      alert("Select lecturer");
+      Swal.fire('Error', 'Select lecturer', 'error');
       return;
     }
     // check if venue is empty the return code stops here
     if (venueselect == "") {
-      alert("Select venue");
+      Swal.fire('Error', 'Select venue', 'error');
       return;
     }
 
@@ -77,20 +77,20 @@ btnbtnaddcourse.addEventListener("click", function() {
     })
 
     .then(() => {
-      alert("Course added successfully");
+      Swal.fire('Success', 'Course added successfully', 'success');
 
       // clear inputs
       document.getElementById("txtcoursename").value = "";
       document.getElementById("txtcoursecode").value = "";
       document.getElementById("lecturerselect").value = "";
       document.getElementById("venueselect").value = "";
+      document.getElementById("btnaddcourse").innerText = "Add new Course";
       loaddata();
       document.getElementById("txtcoursecode").disabled = false;
-      document.getElementById("btnaddcourse").innerText = "Add new Course";
     })
 
     .catch((error) => {
-      alert(error.message);
+      Swal.fire('Error', error.message, 'error');
     });
   });
 //active and inactive courses
@@ -98,11 +98,11 @@ function toggleCourseStatus(courseCode, currentStatus) {
   let newStatus = currentStatus === "active" ? "inactive" : "active";
     firebase.database().ref("courses/" + courseCode).update({Status: newStatus })
     .then(() => {
-      alert("Course status updated to " + newStatus);
+      Swal.fire('Success', 'Course status updated to ' + newStatus, 'success');
       loaddata();
     })
     .catch((error) => {
-      alert(error.message);
+      Swal.fire('Error', error.message, 'error');
     });
 }
 
@@ -189,11 +189,11 @@ firebase.database().ref('courses').once("value", function(snapshot){
       Status: "inactive"
     })
     .then(() => {
-      alert("Course closed successfully");
+      Swal.fire('Success', 'Course closed successfully', 'success');
       loaddata();
     })
     .catch((error) => {
-      alert(error.message);
+      Swal.fire('Error', error.message, 'error');
     });
   }
 
@@ -205,11 +205,11 @@ firebase.database().ref('courses').once("value", function(snapshot){
       Status: "active"
     })
     .then(() => {
-      alert("Course session opened successfully");
+      Swal.fire('Success', 'Course session opened successfully', 'success');
       loaddata();
     })
     .catch((error) => {
-      alert(error.message);
+      Swal.fire('Error', error.message, 'error');
     });
   }
 

@@ -15,14 +15,28 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth()
 
 console.log ('connected to firebase')
-
-function  logout() {
-  // body...
-  firebase.auth().signOut().then(function (){
-    window.location.href = "index.html"
-  }).catch((error) =>{
-    alert("Error while you try to logout")
-  })
+//comment 
+function logout() {
+  Swal.fire({
+    title: 'Are you sure you want to log out?',
+    text: "You can cancel to remain signed in.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Log out',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.removeItem('adminEmail')
+      sessionStorage.removeItem('adminPassword')
+      localStorage.removeItem('adminEmail')
+      localStorage.removeItem('adminPassword')
+      firebase.auth().signOut()
+        .then(() => { window.location.href = "index.html"; })
+        .catch(() => {
+          Swal.fire('Error', 'Could not log out. Please try again.', 'error');
+        });
+    }
+  });
 }
 
 function LoadingAnimation(){
